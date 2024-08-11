@@ -43,10 +43,11 @@ import {
     CHECK_IF_MINT_IS_RENOUNCED,
     CHECK_IF_MINT_IS_BURNED,
     CHECK_IF_MINT_IS_FROZEN,
+    CHECK_IF_MINT_IS_PUMP,
     solanaSubcribeConnection,
 } from '../../config'
 import { solanaConnection } from '../../config'
-import { checkBurn, checkFreezable, checkMintable } from './tokenFilter'
+import { checkBurn, checkFreezable, checkMintable, isPumpAddress, } from './tokenFilter'
 import { bundle } from './executor/jito'
 import { execute } from './executor/legacy'
 import { Server } from 'socket.io';
@@ -230,7 +231,15 @@ const processRaydiumPool = async (signature: string) => {
                     return
                 }
             }
-
+            
+            if(CHECK_IF_MINT_IS_PUMP){
+                const isPump = isPumpAddress(baseMint)
+                if (isPump !== true) {
+                    logger.warn({ mint: baseMint }, 'Skipping, token is not pump.fun!')
+                    return
+                }
+            }
+            
             if (running) saveNewPool(poolId.toString(), baseMint.toString())
             const poolKeys = jsonInfo2PoolKeys(await formatAmmKeysById(poolId.toString())) as LiquidityPoolKeys
             if (autoBuy && !processingToken) {
