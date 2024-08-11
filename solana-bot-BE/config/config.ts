@@ -28,6 +28,7 @@ export const CHECK_IF_MINT_IS_RENOUNCED = retrieveEnvVariable('CHECK_IF_MINT_IS_
 export const CHECK_IF_MINT_IS_FROZEN = retrieveEnvVariable('CHECK_IF_MINT_IS_FROZEN', logger) === 'true'
 export const CHECK_IF_MINT_IS_MUTABLE = retrieveEnvVariable('CHECK_IF_MINT_IS_MUTABLE', logger) === 'true'
 export const CHECK_IF_MINT_IS_BURNED = retrieveEnvVariable('CHECK_IF_MINT_IS_BURNED', logger) === 'true'
+export const CHECK_IF_MINT_IS_PUMP = retrieveEnvVariable('CHECK_IF_MINT_IS_PUMP', logger) === 'true'
 export const BLOCKENGINE_URL = retrieveEnvVariable('BLOCKENGINE_URL', logger)
 export const JITO_AUTH_KEYPAIR = retrieveEnvVariable('JITO_KEY', logger)
 export const JITO_FEE = Number(retrieveEnvVariable('JITO_FEE', logger))
