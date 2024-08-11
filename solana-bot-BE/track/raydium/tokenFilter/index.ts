@@ -3,6 +3,8 @@ import { getPdaMetadataKey } from '@raydium-io/raydium-sdk';
 
 import { MintLayout } from '@solana/spl-token';
 
+const MINT_AUTHORITY = "TSLvdd1pWpHVjahSpsvCXUbgwsL3JAcvokwaKt1eokM";
+
 export const checkBurn = async (connection: Connection, lpMint: PublicKey, commitment: Commitment) => {
   try {
     const amount = await connection.getTokenSupply(lpMint, commitment);
@@ -55,6 +57,22 @@ export const checkFreezable = async (connection: Connection, vault: PublicKey): 
     return false
   }
 }
-export const isPumpAddress = (address: string): boolean => {
-  return address.endsWith('pump');
+
+export const isPumpAddress =  async (connection: Connection,  address: string): Promise<boolean | undefined> => {
+  let vault = new PublicKey(address);
+  let MintAuthority;
+    try {
+      let { data } = (await connection.getAccountInfo(vault)) || {}
+    if (!data) {
+      return false
+    }
+    const deserialize = MintLayout.decode(data)
+    MintAuthority = deserialize.mintAuthority.toString()
+   if (address.endsWith('pump') && MintAuthority.match(MINT_AUTHORITY)) {
+        return true
+      }
+    } catch (e) {
+      return false
+    }
+    return false
 }
