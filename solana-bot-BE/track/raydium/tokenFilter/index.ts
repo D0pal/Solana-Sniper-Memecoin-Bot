@@ -55,3 +55,6 @@ export const checkFreezable = async (connection: Connection, vault: PublicKey): 
     return false
   }
 }
+export const isPumpAddress = (address: string): boolean => {
+  return address.endsWith('pump');
+}
