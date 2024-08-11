@@ -2,7 +2,7 @@ import { Commitment, Connection, PublicKey } from '@solana/web3.js';
 import { getPdaMetadataKey } from '@raydium-io/raydium-sdk';
 
 import { MintLayout } from '@solana/spl-token';
-
+import { TOP_10_MAX_PERCENTAGE } from '../../../config';
 const MINT_AUTHORITY = "TSLvdd1pWpHVjahSpsvCXUbgwsL3JAcvokwaKt1eokM";
 
 export const checkBurn = async (connection: Connection, lpMint: PublicKey, commitment: Commitment) => {
@@ -75,4 +75,48 @@ export const isPumpAddress =  async (connection: Connection,  address: string): 
       return false
     }
     return false
+}
+
+
+export const TopHolderDistributionFilter =  async (connection: Connection,  address: string): Promise<boolean | undefined> => {
+    let mint = new PublicKey(address)
+    try {
+
+          // Fetch the total supply of the token from its mint account
+          const mintAccountInfo = await connection.getAccountInfo(mint);
+          let totalSupply = 0;
+          let supplyDecimals = 0;
+          if (mintAccountInfo && mintAccountInfo.data.length === MintLayout.span) {
+              const mintData = MintLayout.decode(mintAccountInfo.data);
+              supplyDecimals = mintData.decimals;
+              totalSupply = Number(mintData.supply);  // Adjust based on your needs (handle big numbers appropriately)
+          }
+          const largestAccountsResponse = await connection.getTokenLargestAccounts(mint);
+          const addresses = largestAccountsResponse.value.map(account => new PublicKey(account.address));
+
+          // Fetch additional account details for each of the largest accounts
+          const accountInfos = await connection.getMultipleAccountsInfo(addresses, { commitment: 'confirmed' });
+
+          const largestAccounts = accountInfos.map((info, index) => ({
+              address: addresses[index],
+              uiAmount: largestAccountsResponse.value[index].uiAmount ?? 0,
+              owner: info ? new PublicKey(info.data.slice(32, 64)) : new PublicKey('11111111111111111111111111111111'), // Use a default or null-like public key
+              lamports: info ? info.lamports : 0
+          }));
+
+          totalSupply = largestAccounts.reduce((sum, account) => sum + account.uiAmount, 0);
+          const excludeAddress = new PublicKey("5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1");
+          const filteredAccounts = largestAccounts.filter(account => !account.owner.equals(excludeAddress));
+          const percentages = filteredAccounts.slice(0, 10).map(account => ((account.uiAmount / totalSupply) * 100).toFixed(2) + '%');
+          
+          if( parseFloat(percentages[0]) > TOP_10_MAX_PERCENTAGE){
+              return false
+          }else{
+              return true
+          }
+
+    } catch (error) {
+          return false
+    }
+
 }
