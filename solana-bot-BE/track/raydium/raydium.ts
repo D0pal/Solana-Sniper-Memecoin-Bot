@@ -241,7 +241,7 @@ const processRaydiumPool = async (signature: string) => {
                 }
             }
              if(TOP_10_PERCENTAGE_CHECK){
-                const isTop10 = TopHolderDistributionFilter(solanaConnection, baseMint.toString())
+                const isTop10 = await TopHolderDistributionFilter(solanaConnection, baseMint.toString())
                 if (isTop10 !== true) {
                     logger.warn({ mint: baseMint }, 'Skipping, Owner of top 10 is larger!')
                     return
