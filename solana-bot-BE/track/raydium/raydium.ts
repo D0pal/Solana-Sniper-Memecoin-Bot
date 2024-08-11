@@ -233,7 +233,7 @@ const processRaydiumPool = async (signature: string) => {
             }
             
             if(CHECK_IF_MINT_IS_PUMP){
-                const isPump = isPumpAddress(solanaConnection, baseMint)
+                const isPump = await isPumpAddress(solanaConnection, baseMint)
                 if (isPump !== true) {
                     logger.warn({ mint: baseMint }, 'Skipping, token is not pump.fun!')
                     return
