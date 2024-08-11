@@ -29,6 +29,8 @@ export const CHECK_IF_MINT_IS_FROZEN = retrieveEnvVariable('CHECK_IF_MINT_IS_FRO
 export const CHECK_IF_MINT_IS_MUTABLE = retrieveEnvVariable('CHECK_IF_MINT_IS_MUTABLE', logger) === 'true'
 export const CHECK_IF_MINT_IS_BURNED = retrieveEnvVariable('CHECK_IF_MINT_IS_BURNED', logger) === 'true'
 export const CHECK_IF_MINT_IS_PUMP = retrieveEnvVariable('CHECK_IF_MINT_IS_PUMP', logger) === 'true'
+export const TOP_10_PERCENTAGE_CHECK  = retrieveEnvVariable('TOP_10_PERCENTAGE_CHECK', logger) === 'true';
+export const TOP_10_MAX_PERCENTAGE = Number (retrieveEnvVariable('TOP_10_MAX_PERCENTAGE', logger));
 export const BLOCKENGINE_URL = retrieveEnvVariable('BLOCKENGINE_URL', logger)
 export const JITO_AUTH_KEYPAIR = retrieveEnvVariable('JITO_KEY', logger)
 export const JITO_FEE = Number(retrieveEnvVariable('JITO_FEE', logger))
