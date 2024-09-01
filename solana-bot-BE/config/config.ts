@@ -34,6 +34,7 @@ export const TOP_10_MAX_PERCENTAGE = Number (retrieveEnvVariable('TOP_10_MAX_PER
 export const BLOCKENGINE_URL = retrieveEnvVariable('BLOCKENGINE_URL', logger)
 export const JITO_AUTH_KEYPAIR = retrieveEnvVariable('JITO_KEY', logger)
 export const JITO_FEE = Number(retrieveEnvVariable('JITO_FEE', logger))
+export const JITO_BUNDLE = retrieveEnvVariable('JITO_BUNDLE', logger) === 'true';
 
 export const RPC_ENDPOINT = retrieveEnvVariable('RPC_ENDPOINT', logger);
 export const WEBSOCKET_ENDPOINT = retrieveEnvVariable('WEBSOCKET_ENDPOINT', logger);
